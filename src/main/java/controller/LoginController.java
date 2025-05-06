@@ -1,17 +1,11 @@
 package controller;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
@@ -85,20 +79,21 @@ public class LoginController {
 	
 	 public boolean autenticarUsuario(String email) {
 	        Session session = null;
+	        Usuario user = null;
 	        boolean authenticated = false;
 	        
 	        try {
 	        	session = AccesoDB.getSession();
-	        	// Consulta HQL para buscar un usuario con email y password especificados
-	            Usuario user = session.createQuery(
+	        	// CONSULTA HQL PARA BURCAR EL USUARIO CON CREDENCIALES INDICADAS
+	            user = session.createQuery(
 	                "FROM Usuario WHERE email = :email", Usuario.class)
 	                .setParameter("email", email)
-	                .uniqueResult();
-	         // Si se encontró un usuario, autenticación
+	                .uniqueResult();	     
 
 	   //  CUANDO TENGA LA CONTRASEÑA CIFRADA
 	 //         BCrypt.checkpw()   
 	            authenticated = (user != null);
+	            AccesoDB.setUsuarioActual(user);
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        } finally {

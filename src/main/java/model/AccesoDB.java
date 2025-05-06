@@ -15,4 +15,18 @@ public class AccesoDB {
 	 public static void cerrar() {
 		 sessionFactory.close();
 	 }
+	 
+	 private static Usuario usuarioActual;
+
+	    public static void setUsuarioActual(Usuario user) {
+	        usuarioActual = user;
+	    }
+
+	    public static Usuario getUsuarioActual() {
+	        return usuarioActual;
+	    }
+
+	    public static void cerrarSesion() {
+	        usuarioActual = null;
+	    }
 }

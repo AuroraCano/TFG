@@ -1,8 +1,6 @@
 package model;
 
-import java.time.LocalDate;
 import java.util.Date;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -32,7 +30,7 @@ private Date fechaRegistro;
 public Usuario() {		
 }
 
-//CONSTRUCTOR CON PARAMETROS PARA CREACIÓN MANUAL
+//CONSTRUCTOR CON PARAMETROS PARA CREACIÓN MANUAL DE UN USUARIO
 public Usuario(String nombre, String apellidos, String email, String password, String hotel) {
 		this.nombre = nombre;
 		this.apellidos = apellidos;

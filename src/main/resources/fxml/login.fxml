@@ -11,16 +11,19 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #cce7ff);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
    <top>
-      <Label text="Bienvenido a postrEquilibrio" textFill="#470272" BorderPane.alignment="CENTER">
+      <Label text="Bienvenido a postrEquilibrio" textFill="#0f52ba" BorderPane.alignment="CENTER">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
       </Label>
    </top>
    <center>
-      <GridPane prefHeight="170.0" prefWidth="369.0" BorderPane.alignment="CENTER">
+      <GridPane prefHeight="175.0" prefWidth="400.0" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="127.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="273.0" />
