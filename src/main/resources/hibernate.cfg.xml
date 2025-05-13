@@ -12,6 +12,9 @@
 
  <!-- Registro de las clases anotadas -->
 <mapping class="model.Usuario"/>
+<mapping class="model.Ingrediente"/>
+<mapping class="model.Receta"/>
+<mapping class="model.RecetaIngrediente"/>
 
 </session-factory>
 </hibernate-configuration>

@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.AccesoDB;
 
 public class Main extends Application{
 	
@@ -16,7 +17,7 @@ public class Main extends Application{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
 		Parent root = loader.load();
 		Scene scene = new Scene(root);
-		
+	    
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("PostrEquilibrio");
         primaryStage.show();

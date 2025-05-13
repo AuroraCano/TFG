@@ -24,12 +24,12 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Button fx:id="recetasButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="65.0" prefWidth="90.0" style="-fx-text-fill: #4682B4;" text="Recetas" GridPane.rowIndex="1">
+      <Button fx:id="recetasButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="110.0" prefWidth="105.0" style="-fx-text-fill: #4682B4;" text="Recetas" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
          <GridPane.margin>
-            <Insets left="20.0" />
+            <Insets left="10.0" />
          </GridPane.margin>
          <graphic>
             <ImageView fitHeight="73.0" fitWidth="73.0" pickOnBounds="true" preserveRatio="true">
@@ -39,7 +39,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="ingredientesButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="112.0" prefWidth="101.0" style="-fx-text-fill: #228B22;" text="Ingredientes" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <Button fx:id="ingredientesButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="110.0" prefWidth="105.0" style="-fx-text-fill: #228B22;" text="Ingredientes" GridPane.rowIndex="1">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -50,8 +50,11 @@
                </image>
             </ImageView>
          </graphic>
+         <GridPane.margin>
+            <Insets left="20.0" />
+         </GridPane.margin>
       </Button>
-      <Button fx:id="perfilButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="65.0" prefWidth="90.0" style="-fx-text-fill: #0F52BA;" text="Perfil">
+      <Button fx:id="perfilButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="110.0" prefWidth="105.0" style="-fx-text-fill: #0F52BA;" text="Perfil">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -74,24 +77,6 @@
             <Insets bottom="-65.0" left="20.0" />
          </GridPane.margin>
       </ImageView>
-      <ComboBox editable="true" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="1">   
-         <GridPane.margin>
-            <Insets bottom="70.0" />
-         </GridPane.margin>       	 	
-      </ComboBox>
-      <TextField GridPane.columnIndex="2" GridPane.rowIndex="1">
-         <GridPane.margin>
-            <Insets right="15.0" />
-         </GridPane.margin>
-      </TextField>
-      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Buscar" textFill="#0f52ba" GridPane.columnIndex="2" GridPane.rowIndex="1">
-         <GridPane.margin>
-            <Insets bottom="-70.0" />
-         </GridPane.margin>
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Button>
       <Label alignment="CENTER" prefHeight="40.0" prefWidth="271.0" text="Recetario Postrequilibrio" textAlignment="CENTER" textFill="#0f52ba" GridPane.columnIndex="1" GridPane.columnSpan="2147483647">
          <font>
             <Font name="System Bold" size="18.0" />

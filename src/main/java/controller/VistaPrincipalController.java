@@ -20,12 +20,6 @@ public class VistaPrincipalController {
 	private Button recetasButton;
 	@FXML
 	private Button ingredientesButton;
-	@FXML	
-	private ComboBox <String> buscadorComBox;
-	@FXML
-	private TextField buscarTxt;
-	@FXML
-	private Button buscarButton;
 	@FXML
 	private ImageView flechaInicio;
 
@@ -34,6 +28,7 @@ public class VistaPrincipalController {
 		perfilButton.setOnAction(e -> irAPerfil(new ActionEvent()));
 		recetasButton.setOnAction(e -> irARecetas(new ActionEvent()));
 		ingredientesButton.setOnAction(e -> irAIngredientes(new ActionEvent()));
+
 		flechaInicio.setOnMouseClicked(e -> irAInicio());
 	}
 	
@@ -65,14 +60,14 @@ public class VistaPrincipalController {
 		@FXML
 		public void irAIngredientes(ActionEvent event) {
 			try {
-	            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ingredientes.fxml"));
+	            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ingrediente.fxml"));
 	            Stage stage = (Stage) ingredientesButton.getScene().getWindow();
-	            stage.setScene(new Scene(loader.load()));
+	            stage.setScene(new Scene(loader.load()));	          
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
 	    }
-		
+				
 		//METODO PARA VOLVER A LA PANTALLA LOGIN
 		@FXML
 		public void irAInicio() {
