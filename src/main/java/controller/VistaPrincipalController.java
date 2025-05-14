@@ -21,6 +21,8 @@ public class VistaPrincipalController {
 	@FXML
 	private Button ingredientesButton;
 	@FXML
+	private Button rankingButton;
+	@FXML
 	private ImageView flechaInicio;
 
 	@FXML
@@ -28,6 +30,7 @@ public class VistaPrincipalController {
 		perfilButton.setOnAction(e -> irAPerfil(new ActionEvent()));
 		recetasButton.setOnAction(e -> irARecetas(new ActionEvent()));
 		ingredientesButton.setOnAction(e -> irAIngredientes(new ActionEvent()));
+		rankingButton.setOnAction(e -> irARanking(new ActionEvent()));
 
 		flechaInicio.setOnMouseClicked(e -> irAInicio());
 	}
@@ -67,6 +70,18 @@ public class VistaPrincipalController {
 	            e.printStackTrace();
 	        }
 	    }
+		
+		//METODO PARA IR A LA PANTALLA DEL RANKING
+				@FXML
+				public void irARanking(ActionEvent event) {
+					try {
+			            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ranking.fxml"));
+			            Stage stage = (Stage) ingredientesButton.getScene().getWindow();
+			            stage.setScene(new Scene(loader.load()));	          
+			        } catch (Exception e) {
+			            e.printStackTrace();
+			        }
+			    }
 				
 		//METODO PARA VOLVER A LA PANTALLA LOGIN
 		@FXML

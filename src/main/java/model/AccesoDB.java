@@ -64,7 +64,7 @@ import org.hibernate.cfg.Configuration;
 			 return ingredienteActual;
 	 	}
 
-		 private static Receta recetaActual;
+		private static Receta recetaActual;
 
 		public static Receta getRecetaActual() {
 			return recetaActual;

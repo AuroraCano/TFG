@@ -76,6 +76,8 @@
         <columns>
            <TableColumn fx:id="columNombre" prefWidth="180.0" text="Nombre" />
            <TableColumn fx:id="columTipo" prefWidth="184.0" text="Tipo Postre" />
+           <TableColumn fx:id="colEliminar" text="Eliminar" />
+            <TableColumn fx:id="colEditar" text="Editar" />
         </columns>
       </TableView>
       <AnchorPane minHeight="40.0" prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #cce7ff);">

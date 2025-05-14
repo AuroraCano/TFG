@@ -197,7 +197,7 @@ public class IngredienteController {
 	                listaIngredientes.remove(ingred);
 	            });
 
-	            btn.setStyle("-fx-background-color: #8B0000; -fx-text-fill: white; -fx-font-size: 14px;");	            
+	            btn.setStyle("-fx-background-color: #FF6666; -fx-text-fill: white; -fx-font-size: 14px;");	            
 	        }
 
 	        @Override
