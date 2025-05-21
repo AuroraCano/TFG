@@ -4,10 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import model.AccesoDB;
@@ -24,35 +21,68 @@ public class LoginController {
 	private Button loginButton;
 	@FXML	
 	private Button registerButton;
+	@FXML
+	private Hyperlink linkOlvidarPass;
 
 	@FXML
 	public void initialize() {
 		loginButton.setOnAction(e -> iniciarSesion());
 		registerButton.setOnAction(e -> irARegistro(new ActionEvent()));
+		linkOlvidarPass.setOnAction(e -> mostrarRecordatorio());
 	}
 	
 	@FXML
 	public void iniciarSesion() {
 		
 		String email = txtemail.getText();
-	//	String password = txtpass.getText();
+		String password = txtpass.getText();
+		
+		if(email.isBlank() || password.isBlank()) {
+			mostrarError("Introduce tu email y contraseña");
+			return; //DETIENE EL METODO
+		}
 		
 		// VERIFICA DATOS USUARIO
-        if (autenticarUsuario(email)) {
+        if (autenticarUsuario(email, password)) {
         	irARecetario();
-        } else {
-            // MOSTRAR MENSAJE SI LOS DATOS SON ERRONEOS (EN CONSOLA Y UI)
-            System.out.println("Credenciales incorrectas");
-            mostrarMensaje();
+        } else {                   
+            mostrarError("Email o contraseña incorrectos");
         }
 		
 	}
-	
-	//METODO PARA MOSTRAR MENSAJE INFORMATIVO EN LA INTERFAZ DE USUARIO
-	public void mostrarMensaje() {
-		Alert alerta = new Alert (AlertType.INFORMATION);
-		alerta.setContentText("Datos incorrectos");
-		alerta.show();
+
+	 public boolean autenticarUsuario(String email, String password) {
+	        Session session = null;	   	        
+	        try {
+	        	session = AccesoDB.getSession();
+	        	// CONSULTA HQL PARA BURCAR EL USUARIO CON CREDENCIALES INDICADAS
+	            Usuario user = session.createQuery(
+	                "FROM Usuario WHERE email = :email AND password = :password", Usuario.class)
+	                .setParameter("email", email)
+	                .setParameter("password", password)
+	                .uniqueResult();
+	            if(user != null) {
+	            	AccesoDB.setUsuarioActual(user);
+	            	return true;
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            if (session != null) session.close();
+	        }
+	        return false;
+	}
+
+	public void mostrarRecordatorio() {
+		try {
+	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/recuperarPassword.fxml"));
+	        Stage stage = new Stage();
+	        stage.setTitle("Recuperar contraseña");
+	        stage.setScene(new Scene(loader.load()));
+	        stage.show();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 	
 	@FXML
@@ -76,31 +106,12 @@ public class LoginController {
             e.printStackTrace();
         }
     }
-	
-	 public boolean autenticarUsuario(String email) {
-	        Session session = null;
-	        Usuario user = null;
-	        boolean authenticated = false;
-	        
-	        try {
-	        	session = AccesoDB.getSession();
-	        	// CONSULTA HQL PARA BURCAR EL USUARIO CON CREDENCIALES INDICADAS
-	            user = session.createQuery(
-	                "FROM Usuario WHERE email = :email", Usuario.class)
-	                .setParameter("email", email)
-	                .uniqueResult();	     
-
-	   //  CUANDO TENGA LA CONTRASEÑA CIFRADA
-	 //         BCrypt.checkpw()   
-	            authenticated = (user != null);
-	            AccesoDB.setUsuarioActual(user);
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        } finally {
-	            if (session != null) session.close();
-	        }
-
-	        return authenticated;
-	    }	
+		 
+	//METODO PARA MOSTRAR MENSAJE DE ERROR EN LA INTERFAZ DE USUARIO
+		public void mostrarError(String mensaje) {
+			Alert alerta = new Alert (AlertType.ERROR);
+			alerta.setContentText(mensaje);
+			alerta.show();
+		}
 		
 	}

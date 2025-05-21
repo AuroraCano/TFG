@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
@@ -8,6 +9,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,25 +17,26 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.IngredienteController">
-  <VBox prefHeight="569.0" prefWidth="600.0">
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="576.0" text="Gestión de Ingredientes" textAlignment="CENTER" textFill="#0f52ba">
+<AnchorPane prefHeight="570.0" prefWidth="624.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #cce7ff);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.IngredienteController">
+  <VBox prefHeight="569.0" prefWidth="608.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #cce7ff);">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="61.0" prefWidth="643.0" style="-fx-background-color: #E6E6FA;" text="Lista de Ingredientes" textAlignment="CENTER" textFill="#0f52ba">
          <font>
-            <Font name="System Bold" size="18.0" />
+            <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-          <TableView fx:id="tablaIngredientes" prefWidth="600.0" VBox.vgrow="ALWAYS">
+          <TableView fx:id="tablaIngredientes" prefHeight="295.0" prefWidth="672.0" style="-fx-background-color: #E6E6FA;" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn fx:id="columNombre" text="Nombre" />
-            <TableColumn fx:id="columTipo" text="Tipo" />
-            <TableColumn fx:id="columCalorias" text="Calorías" />
-            <TableColumn fx:id="columProcesado" text="Procesado" />
-            <TableColumn fx:id="colEliminar" text="Eliminar" />
+            <TableColumn fx:id="columNombre" prefWidth="152.0" text="Nombre" />
+            <TableColumn fx:id="columTipo" prefWidth="116.0" text="Tipo" />
+            <TableColumn fx:id="columCalorias" prefWidth="76.0" text="Calorías" />
+            <TableColumn fx:id="columProcesado" prefWidth="132.0" text="Procesado" />
+            <TableColumn fx:id="colEliminar" prefWidth="73.0" text="Eliminar" />
         </columns>
     </TableView>
-      <GridPane alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="196.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #cce7ff);">           
+      <GridPane alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="204.0" prefWidth="640.0" style="-fx-background-color: #E6E6FA;">           
             <Label contentDisplay="TOP" text="Nombre">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -65,6 +68,16 @@
                <GridPane.margin>
                   <Insets left="120.0" />
                </GridPane.margin>
+            <effect>
+               <DropShadow>
+                  <color>
+                     <Color red="0.6627451181411743" green="0.48627451062202454" blue="0.6980392336845398" />
+                  </color>
+               </DropShadow>
+            </effect>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
             </Button>
             <Button fx:id="editarButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editarIngrediente" text="Editar" textFill="#0f52ba" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <font>
@@ -73,6 +86,16 @@
                <GridPane.margin>
                   <Insets left="25.0" />
                </GridPane.margin>
+            <effect>
+               <DropShadow>
+                  <color>
+                     <Color red="0.6627451181411743" green="0.48627451062202454" blue="0.6980392336845398" />
+                  </color>
+               </DropShadow>
+            </effect>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
             </Button>
             <TextField fx:id="nombreTxt" alignment="CENTER" prefHeight="2.0" prefWidth="165.0" GridPane.columnIndex="1">
                <opaqueInsets>
@@ -133,4 +156,26 @@
          </padding>       
       </GridPane>     
    </VBox>
+   <Button fx:id="masButton" alignment="CENTER" contentDisplay="CENTER" layoutX="548.0" layoutY="15.0" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#alPulsarMas" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS">
+      <graphic>
+         <ImageView fitHeight="40.0" fitWidth="50.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../images/mas.png" />
+            </image>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+         </ImageView>
+      </graphic>
+      <effect>
+         <DropShadow>
+            <color>
+               <Color red="0.6627451181411743" green="0.48627451062202454" blue="0.6980392336845398" />
+            </color>
+         </DropShadow>
+      </effect>
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor>
+   </Button>
 </AnchorPane>

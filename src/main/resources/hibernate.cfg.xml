@@ -15,6 +15,7 @@
 <mapping class="model.Ingrediente"/>
 <mapping class="model.Receta"/>
 <mapping class="model.RecetaIngrediente"/>
+<mapping class="model.Valoracion"/>
 
 </session-factory>
 </hibernate-configuration>

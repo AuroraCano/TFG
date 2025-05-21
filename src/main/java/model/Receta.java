@@ -5,7 +5,10 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import jakarta.persistence.*;
 import javafx.scene.image.Image;
 import javafx.embed.swing.SwingFXUtils;
@@ -29,9 +32,21 @@ private	String nombre;
 private	String tipoPostre;
 private	String descripcion;
 
+@Column (name = "puntuacion")
+private Integer puntuacion;
+
+private int ranking;
+private double valoracionMedia;
+private String hotel;
+
 @Column (name="foto")
 @Lob
 private	byte[] foto;
+
+//AÑADIMOS ASI RELACION ENTRE RECETA Y RECETAINGREDIENTE
+@OneToMany(mappedBy = "idReceta", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+private List<RecetaIngrediente> ingredientes = new ArrayList<>();
+
 
 @Temporal(TemporalType.TIMESTAMP)
 @Column(name = "fecha_creacion", updatable = false) //EVITA CAMBIAR ESTA FECHA EN ACTUALIZACIONES
@@ -122,6 +137,41 @@ public String getTipoPostre() {
 
 public void setTipoPostre(String tipoPostre) {
 	this.tipoPostre = tipoPostre;
+}
+
+public Integer getPuntuacion() { 
+	return puntuacion; 
+}
+
+public void setPuntuacion(Integer puntuacion) {
+	this.puntuacion = puntuacion; 
+}
+
+public int getRanking() {
+	return ranking;
+}
+public void setRanking(int ranking) {
+	this.ranking = ranking;
+}
+
+public double getValoracionMedia() {
+	return this.valoracionMedia; //Nº DE ESTRELLAS
+	}
+
+public void setValoracionMedia(double valoracionMedia) {
+	this.valoracionMedia = valoracionMedia;
+}
+
+public String getHotel() {
+	return hotel;
+}
+
+public List<RecetaIngrediente> getIngredientes() {
+    return ingredientes;
+}
+
+public void setIngredientes(List<RecetaIngrediente> ingredientes) {
+    this.ingredientes = ingredientes;
 }
 
 }

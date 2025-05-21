@@ -2,7 +2,6 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -10,45 +9,29 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.AccesoDB;
-import model.Ingrediente;
 import model.Receta;
-import model.Usuario;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class RecetaController {		
-
-		@FXML
-		private TextField txtnombre;
-		@FXML
-		private ComboBox<String> tipoPostreComBox;
-		@FXML
-		private TextArea  txtdescripcion;
+		
 		@FXML	
-		private ImageView imgfoto;
-		@FXML	
-		private Button añadirButton;
-		@FXML	
-		private Button editarButton;
-		@FXML	
-		private Button eliminarButton;
-		@FXML	
-		private Button guardarButton;
+		private Button masButton;
 		@FXML
 		private ComboBox<String> buscadorComBox;
 		@FXML
@@ -66,32 +49,26 @@ public class RecetaController {
 		@FXML
 		private TableColumn<Receta, Void> colEliminar; 
 		@FXML
-		private TableColumn<Receta, Void> colEditar; 
+		private TableColumn<Receta, Void> colEditar;
+		@FXML
+		private TableColumn<Receta, Integer> columPuntuacion;
 		@FXML
 		private ObservableList<Receta> listaRecetas = FXCollections.observableArrayList();		
 		
 		@FXML
-		public void initialize () {
-			
+		public void initialize () {			
 			buscadorComBox.getItems().addAll(
 			        "Tipo postre",
 			        "Contiene ingrediente:",
 			        "NO Contiene ingrediente:"
 			    );
-			buscadorComBox.getSelectionModel().getSelectedItem();
 			
 			cargarRecetaDesdeDB();
-			
-			columNombre.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNombre()));
-			columTipo.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getTipoPostre()));
-
+			configurarColumnas();			
 			tablaRecetas.setItems(listaRecetas);
-			tablaRecetas.refresh();
-			btnEliminar();
-			btnEditar();
-
-			añadirButton.setOnAction(e -> añadirReceta());
-			
+			añadirColumnaEliminar();
+			añadirColumnaEditar();			
+						
 			//AL HACER DOBLE CLIC SOBRE UNA FILA DE RECETA -> ABRE LA FICHA DE LA RECETA (DONDE SE PODRA EDITAR SI SE DESEA)
 			tablaRecetas.setRowFactory(tv -> {
 			    TableRow<Receta> row = new TableRow<>();
@@ -107,17 +84,21 @@ public class RecetaController {
 	    }
 		
 		@FXML
-		public void añadirReceta() {	
-			
-		irACrearReceta();
+		public void añadirReceta() {				
+			irACrearReceta();	
+		}
 		
+		private void configurarColumnas() {
+			columNombre.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNombre()));
+			columTipo.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getTipoPostre()));
+			columPuntuacion.setCellValueFactory(cellData ->	new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getPuntuacion()).asObject());
 		}
 					
 		//METODO PARA IR A LA PANTALLA CREACIÓN DE RECETA
 		public void irACrearReceta() {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/crearReceta.fxml"));
-	            Stage stage = (Stage) añadirButton.getScene().getWindow();
+	            Stage stage = (Stage) masButton.getScene().getWindow();
 	            stage.setScene(new Scene(loader.load()));
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -125,36 +106,30 @@ public class RecetaController {
 		}
 				
 		//CREAMOS ACCION DEL BOTON ELIMINAR DENTRO DE LA TABLA
-		private void btnEliminar() {
+		private void añadirColumnaEliminar() {
 			
 		    colEliminar.setCellFactory(param -> new TableCell<>() {
 		        private final Button btn = new Button("✖"); 
 		        {
 		            btn.setOnAction(event -> {
 		                Receta recet = getTableView().getItems().get(getIndex());
-		                
-		                //ELIMINAR DE LA BBDD
-		                Session session = null;
-		        	    Transaction tr = null;
-		        		try {
-		        			session = AccesoDB.getSession();
-		        			tr = session.beginTransaction();
-		        			session.remove(session.merge(recet)); //BORRA EL INGREDIENTE
-		        			tr.commit();					        			        				
-		        			} catch (Exception ex) {
-		        				if (tr != null) tr.rollback();
-		        	            ex.printStackTrace();
-		        	            System.out.println("Error al eliminar receta.");	           
-		        	        } finally {
-		        	            if (session != null) session.close();
-		        			}
-		        		//ELIMINAR ESA FILA EN LA TABLA DE LA INTERFAZ USUARIO
-		        		listaRecetas.remove(recet);
-		            });
+		                //MOSTRAR AL USUARIO MENSAJE DE AVISO ANTES DE ELIMINAR RECETA Y ESPERAR CONFIRMACION					
+						Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+					    confirmacion.setTitle("Confirmar eliminación");
+					    confirmacion.setHeaderText("¿Estás seguro de que deseas eliminar esta receta?");
+					    confirmacion.setContentText("Receta: " + recet.getNombre());
 
+					    confirmacion.showAndWait().ifPresent(respuesta -> {
+					        if (respuesta == ButtonType.OK) {		                		                		             
+					    // ACCESO A LA BBDD Y ELIMINAR EL INGREDIENTE
+						AccesoDB.accederDB(session -> session.remove(session.merge(recet)));				
+						// ELIMINAR DE LA TABLA DE LA INTERFAZ USUARIO
+						listaRecetas.remove(recet);
+					        }
+					    });	
+		            });    
 		            btn.setStyle("-fx-background-color: #FF6666; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;");	            
 		        }
-
 		        @Override
 		        protected void updateItem(Void item, boolean empty) {
 		            super.updateItem(item, empty);
@@ -168,23 +143,18 @@ public class RecetaController {
 		        }
 		    });
 		}
+				
 		
 		// CREAMOS ACCION DEL BOTON EDITAR DENTRO DE LA TABLA
-		private void btnEditar() {
+		private void añadirColumnaEditar() {
 
 			colEditar.setCellFactory(param -> new TableCell<>() {
 				private final Button btn = new Button();
-				{
-					try {
-						
-					
+				{								
 					ImageView iconoLapiz = new ImageView(new Image(getClass().getResourceAsStream("/images/lapiz.png")));
 					iconoLapiz.setFitWidth(20);
 					iconoLapiz.setFitHeight(20);
-					btn.setGraphic(iconoLapiz);
-					} catch (Exception e) {
-						System.err.println("No se pudo cargar el icono lápiz: " + e.getMessage());
-					}
+					btn.setGraphic(iconoLapiz);				
 					btn.setStyle("-fx-background-color: #74A9D8; -fx-padding:4; -fx-cursor: hand;");
 					btn.setOnAction(event -> {
 						Receta recet = getTableView().getItems().get(getIndex());
@@ -203,7 +173,6 @@ public class RecetaController {
 						setAlignment(Pos.CENTER);
 					}
 				}
-
 			});
 		}
 
@@ -214,32 +183,38 @@ public class RecetaController {
 		    	AccesoDB.setRecetaActual(recet);
 		    	//CARGAMOS LA VISTA FXML
 		    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fichaReceta.fxml"));
-	            Stage stage = (Stage) añadirButton.getScene().getWindow();
+	            Stage stage = (Stage) tablaRecetas.getScene().getWindow();
 	            stage.setScene(new Scene(loader.load()));	            
 		    } catch (IOException e) {
 		        e.printStackTrace();
 		    }
-		}
-					
+		}					
 		
 		// METODO PARA VOLVER A LA PANTALLA DEL MENU PRINCIPAL/RECETARIO
 		public void irARecetario() {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/recetario.fxml"));
-				Stage stage = (Stage) añadirButton.getScene().getWindow();
+				Stage stage = (Stage) flechaRecetario.getScene().getWindow();
 				stage.setScene(new Scene(loader.load()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		
-		private void cargarRecetaDesdeDB() {
+		public void cargarRecetaDesdeDB() {
 			// LIMPIAMOS LISTA Y CONECTAMOS CON LA BBDD
 			listaRecetas.clear();
 			Session session = null;
 			try {
 				session = AccesoDB.getSession();
-				listaRecetas.addAll(session.createQuery("FROM Receta", Receta.class).list());
+				
+			//CARGAMOS LA RECETA JUNTO CON SUS INGREDIENTES
+			List<Receta> recetas = session.createQuery(
+				"SELECT DISTINCT r FROM Receta r LEFT JOIN FETCH r. ingredientes ORDER BY r.nombre ASC", Receta.class)
+				.getResultList();
+				
+ 			listaRecetas.addAll(recetas);
+ 				
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("Error al cargar recetas desde la BBDD.");
@@ -247,8 +222,7 @@ public class RecetaController {
 				if (session != null)
 					session.close();
 			}
-		}
-			
+		}			
 			
 		//METODO PARA MOSTRAR MENSAJE INFORMATIVO EN LA INTERFAZ DE USUARIO
 		public void mostrarMensaje() {

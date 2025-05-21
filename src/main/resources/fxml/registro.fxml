@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,7 +16,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegistroController">
    <children>
-      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #cce7ff);">
+      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #E6E6FA;">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="152.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="449.0" minWidth="10.0" prefWidth="448.0" />
@@ -77,6 +78,9 @@
                <GridPane.margin>
                   <Insets left="100.0" />
                </GridPane.margin>
+               <effect>
+                  <DropShadow />
+               </effect>
             </Button>
             <TextField fx:id="txtnombre" GridPane.columnIndex="1">
                <opaqueInsets>
@@ -129,9 +133,9 @@
             </ImageView>
          </children>
       </GridPane>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="225.0" text="Formulario de Registro" textAlignment="CENTER" textFill="#0f52ba">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutY="-2.0" prefHeight="55.0" prefWidth="600.0" text="Formulario de Registro" textAlignment="CENTER" textFill="#0f52ba">
          <font>
-            <Font name="System Bold" size="18.0" />
+            <Font name="System Bold" size="22.0" />
          </font>
       </Label>
    </children>

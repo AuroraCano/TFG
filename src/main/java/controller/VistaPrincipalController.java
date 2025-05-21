@@ -6,11 +6,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import model.AccesoDB;
 
 public class VistaPrincipalController {
 
@@ -64,8 +63,13 @@ public class VistaPrincipalController {
 		public void irAIngredientes(ActionEvent event) {
 			try {
 	            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ingrediente.fxml"));
+	            Scene scene = new Scene(loader.load());	
+	            
+	            IngredienteController controller = loader.getController();
+	            controller.setUsuarioActual(AccesoDB.getUsuarioActual());
+	            
 	            Stage stage = (Stage) ingredientesButton.getScene().getWindow();
-	            stage.setScene(new Scene(loader.load()));	          
+	            stage.setScene(scene);
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }

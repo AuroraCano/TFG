@@ -40,7 +40,32 @@ public class RegistroController {
 	    }
 		
 		public void guardarRegistro() {
-
+		
+		//VALIDAMOS QUE NO PUEDE TENER CAMPOS VACÍOS
+		if (txtnombre.getText().isBlank() ||
+			txtapellidos.getText().isBlank() ||
+			txtemail.getText().isBlank() ||
+			txtpass.getText().isBlank() ||
+			txtrepetirpass.getText().isBlank() ||
+			txthotel.getText().isBlank()) {
+			mostrarError("Todos los campos deben estar rellenos.");
+			return; //DETIENE EL METODO
+		}
+			
+		//VALIDAMOS FORMATO DEL EMAIL
+		String email = txtemail.getText();
+	    if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) {
+	        mostrarError("Introduce un correo electrónico válido.");
+	        return;
+	    }
+		
+	    //VALIDAMOS QUE LAS CONTRASEÑAS COINCIDAN
+	    if (!txtpass.getText().equals(txtrepetirpass.getText())) {
+			mostrarError("Las contraseñas no coinciden");
+		     return; 
+		    }
+	    
+	    //CREAMOS USUARIO
 		Usuario user = new Usuario (
 			txtnombre.getText(),
 			txtapellidos.getText(),
@@ -49,14 +74,7 @@ public class RegistroController {
 			txthotel.getText()	
 				);
 		
-		//SI LOS CAMPOS DE CONTRASEÑA NO COINCIDEN MOSTRAR MENSAJE DE ERROR Y DETENER EL METODO guardarRegistro
-		if (!txtpass.getText().equals(txtrepetirpass.getText())) {
-			mostrarError();
-		     return; //DETIENE EL METODO
-		    }
-
-		// CONEXION CON LA BBDD E INSETAR REGISTRO
-		
+		// CONEXION CON LA BBDD E INSETAR REGISTRO		
 		Session session = null;
         Transaction tr = null;
 				 
@@ -65,14 +83,13 @@ public class RegistroController {
 				tr = session.beginTransaction();
 				session.persist(user); //INSERTA EL USUARIO EN LA BBDD
 				tr.commit();				
-				System.out.println("Usuario registrado correctamente.");
-				mostrarMensaje();
+				mostrarMensaje("Registro realizado correctamente");
 				irAInicio();
 				
 			} catch (Exception e) {
 				if (tr != null) tr.rollback();
 	            e.printStackTrace();
-	            System.out.println("Error al registrar usuario.");	           
+	            mostrarError("Error al registrar usuario.");
 	        } finally {
 	            if (session != null) session.close();
 			}              						
@@ -89,16 +106,16 @@ public class RegistroController {
 	        }
 		}
 		//METODO PARA MOSTRAR MENSAJE INFORMATIVO EN LA INTERFAZ DE USUARIO
-		public void mostrarMensaje() {
+		public void mostrarMensaje(String mensaje) {
 			Alert alerta = new Alert (AlertType.INFORMATION);
-			alerta.setContentText("Registro realizado correctamente");
+			alerta.setContentText(mensaje);
 			alerta.show();
 		}
 		
 		//METODO PARA MOSTRAR MENSAJE ERROR EN LA INTERFAZ DE USUARIO
-		public void mostrarError() {
+		public void mostrarError(String mensaje) {
 			Alert error = new Alert (AlertType.ERROR);
-			error.setContentText("Las contraseñas no coinciden");
+			error.setContentText(mensaje);
 			error.show();
 		}
 }

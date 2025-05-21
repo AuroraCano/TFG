@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #E6E6FA;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RankingController">
+
+    <children>
+
+        <Label alignment="CENTER" layoutX="-2.0" layoutY="1.0" prefHeight="51.0" prefWidth="800.0" style="-fx-text-fill: #0f52ba;" text="Ranking de Recetas Saludables">
+            <font>
+                <Font name="System Bold" size="22.0" />
+            </font>
+        </Label>
+
+        <TableView fx:id="tablaRanking" layoutX="50.0" layoutY="70.0" prefHeight="450.0" prefWidth="700.0">
+
+            <columns>
+                <TableColumn fx:id="columPosicion" prefWidth="80.0" text="Posición" />
+                <TableColumn fx:id="columPuntuacion" prefWidth="100.0" text="Puntuación" />
+                <TableColumn fx:id="columNombreReceta" prefWidth="180.0" text="Receta" />
+                <TableColumn fx:id="columNombreUsuario" prefWidth="160.0" text="Usuario" />
+                <TableColumn fx:id="columHotel" prefWidth="100.0" text="Hotel" />
+            </columns>
+        </TableView>
+
+        <ImageView fx:id="flechaRecetario" fitHeight="40.0" fitWidth="50.0" layoutX="14.0" layoutY="538.0" onMouseClicked="#irARecetario" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../images/flecha3.png" />
+            </image>
+        </ImageView>
+
+    </children>
+</AnchorPane>

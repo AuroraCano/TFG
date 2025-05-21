@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,49 +16,61 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="557.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RecetaController">
    <children>
-      <Label alignment="CENTER" prefHeight="52.0" prefWidth="600.0" text="Lista de Recetas" textAlignment="CENTER" textFill="#0f52ba">
+      <Label alignment="CENTER" prefHeight="53.0" prefWidth="600.0" style="-fx-background-color: #E6E6FA;" text="Lista de Recetas" textAlignment="CENTER" textFill="#0f52ba" VBox.vgrow="ALWAYS">
          <font>
-            <Font name="System Bold" size="18.0" />
+            <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-      <GridPane alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="86.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #cce7ff);">
+      <GridPane alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="601.0" style="-fx-background-color: #E6E6FA;">
          <columnConstraints>
             <ColumnConstraints minWidth="200.0" />
             <ColumnConstraints maxWidth="277.0" minWidth="200.0" prefWidth="277.0" />
             <ColumnConstraints maxWidth="195.0" minWidth="103.0" prefWidth="103.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="10.0" />
-            <RowConstraints maxHeight="52.0" minHeight="15.0" prefHeight="52.0" />
+            <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+            <RowConstraints maxHeight="60.0" minHeight="0.0" prefHeight="60.0" />
+            <RowConstraints maxHeight="62.0" minHeight="50.0" prefHeight="29.0" />
             <RowConstraints />
             <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
-            <RowConstraints />
+            <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
          </rowConstraints>
          <padding>
             <Insets right="20.0" />
          </padding>
          <children>
-            <Label contentDisplay="TOP" text="Filtrado búsqueda">
+            <Label contentDisplay="TOP" text="Filtrado búsqueda" GridPane.rowIndex="1">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
                <GridPane.margin>
-                  <Insets left="25.0" />
+                  <Insets left="25.0" top="30.0" />
                </GridPane.margin>
             </Label>
-            <Button fx:id="buscadorButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" text="Buscar" textAlignment="CENTER" textFill="#0f52ba" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Button fx:id="buscadorButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" text="Buscar" textAlignment="CENTER" textFill="#0f52ba" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.6627451181411743" green="0.48627451062202454" blue="0.6980392336845398" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Button>
-            <TextField fx:id="buscadorTxt" alignment="CENTER" prefHeight="25.0" prefWidth="179.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="buscadorTxt" alignment="CENTER" prefHeight="25.0" prefWidth="179.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -65,24 +78,12 @@
                   <Insets left="15.0" right="20.0" />
                </GridPane.margin>
             </TextField>
-            <ComboBox fx:id="buscadorComBox" prefHeight="25.0" prefWidth="166.0" GridPane.rowIndex="1">
+            <ComboBox fx:id="buscadorComBox" prefHeight="25.0" prefWidth="166.0" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="15.0" right="20.0" />
                </GridPane.margin>
             </ComboBox>
-         </children>
-      </GridPane>
-      <TableView fx:id="tablaRecetas" prefHeight="385.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #cce7ff);">
-        <columns>
-           <TableColumn fx:id="columNombre" prefWidth="180.0" text="Nombre" />
-           <TableColumn fx:id="columTipo" prefWidth="184.0" text="Tipo Postre" />
-           <TableColumn fx:id="colEliminar" text="Eliminar" />
-            <TableColumn fx:id="colEditar" text="Editar" />
-        </columns>
-      </TableView>
-      <AnchorPane minHeight="40.0" prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #cce7ff);">
-         <children>
-            <Button fx:id="añadirButton" alignment="CENTER" contentDisplay="CENTER" layoutX="538.0" layoutY="5.0" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#irACrearReceta" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS">
+            <Button fx:id="masButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#irACrearReceta" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <graphic>
                   <ImageView fx:id="flechaRecetario" fitHeight="40.0" fitWidth="50.0" nodeOrientation="INHERIT" onMouseClicked="#irARecetario" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -93,7 +94,33 @@
                      </cursor>
                   </ImageView>
                </graphic>
+               <GridPane.margin>
+                  <Insets left="35.0" />
+               </GridPane.margin>
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.6627451181411743" green="0.48627451062202454" blue="0.6980392336845398" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Button>
+         </children>
+      </GridPane>
+      <TableView fx:id="tablaRecetas" prefHeight="360.0" prefWidth="600.0" style="-fx-background-color: #E6E6FA;" VBox.vgrow="ALWAYS">
+        <columns>
+           <TableColumn fx:id="columNombre" prefWidth="180.0" text="Nombre" />
+           <TableColumn fx:id="columTipo" prefWidth="184.0" text="Tipo Postre" />
+           <TableColumn fx:id="colEliminar" text="Eliminar" />
+            <TableColumn fx:id="colEditar" text="Editar" />
+            <TableColumn fx:id="columPuntuacion" text="Puntuación" />
+        </columns>
+      </TableView>
+      <AnchorPane minHeight="40.0" prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: #E6E6FA;">
+         <children>
             <ImageView fx:id="flechaRecetario" fitHeight="40.0" fitWidth="50.0" layoutX="7.0" layoutY="5.0" onMouseClicked="#irARecetario" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/flecha3.png" />

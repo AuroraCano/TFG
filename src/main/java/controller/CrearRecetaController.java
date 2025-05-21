@@ -1,15 +1,15 @@
 package controller;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -75,9 +75,13 @@ public class CrearRecetaController {
 		        "Bebida",
 		        "Otro"
 		    );
-		// CARGAR INGREDIENTES DESDE LA BBDD
+		// CARGAMOS TODOS LOS INGREDIENTES QUE EXISTEN EN LA BBDD ORDENADOS ALFABETICAMENTE
 	    Session session = AccesoDB.getSession();
-	    comboIngred.setItems(FXCollections.observableArrayList(AccesoDB.getTodosLosIngredientes()));
+	    List<Ingrediente> ingredientes = AccesoDB.getTodosLosIngredientes();
+		ObservableList<Ingrediente> obsList = FXCollections.observableArrayList(ingredientes);
+		SortedList<Ingrediente> sortedList = new SortedList<>(obsList);
+		sortedList.setComparator(Comparator.comparing(Ingrediente::getNombre));
+		comboIngred.setItems(sortedList);
 	    session.close();
 
 	    // CONFIGURAMOS LA TABLA DE INGREDIENTES
@@ -118,19 +122,13 @@ public class CrearRecetaController {
 	        mostrarAlerta("Selecciona un ingrediente y escribe la cantidad.");
 	    }
 	}
-
 	
-	private void mostrarAlerta(String string) {
-		Alert alert = new Alert(Alert.AlertType.WARNING);
-	    alert.setTitle("Aviso");
-	    alert.setContentText(string);
-	    alert.showAndWait();
-	}
+	
 
 	//CREAMOS ACCION DEL BOTON ELIMINAR DENTRO DE LA TABLA
 	private void añadirBotonEliminar() {
 	    colEliminar.setCellFactory(param -> new TableCell<>() {
-	        private final Button btn = new Button("🗑 Eliminar");
+	        private final Button btn = new Button("✖");
 
 	        {
 	            btn.setOnAction(e -> {
@@ -138,7 +136,7 @@ public class CrearRecetaController {
 	                listaIngredReceta.remove(ri);
 	            });
 
-	            btn.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-weight: bold;");
+	            btn.setStyle("-fx-background-color: #FF6666; -fx-text-fill: white; -fx-font-size: 14px;");
 	        }
 
 	        @Override
@@ -172,8 +170,6 @@ public class CrearRecetaController {
 			if (imgfoto.getImage() != null) {
 				recet.setImage(imgfoto.getImage()); // CONVERTIMOS LA IMAGEN A BYTE[]
 			}
-	
-//		listaRecetas.add(recet);
 		limpiarFormulario();
 		
 		// PARA ASIGNAR USUARIO ACTUAL
@@ -187,19 +183,28 @@ public class CrearRecetaController {
 			try {
 				session = AccesoDB.getSession();
 				tr = session.beginTransaction();
-				//PASO 1: GUARDAR LA RECETA PARA GENERAR SU ID
-				session.persist(recet);
-				session.flush(); //FUERZA A GUARDAR PARA OBTENER EL ID
-				//PASO 2: GUARDAR LAS LINEAS DE INGREDIENTES
-				for(RecetaIngrediente ri : listaIngredReceta) {
-					ri.setId_receta(recet); //ASIGNAMOS LA RECETA YA GUARDADA
-					session.persist(ri);
-				}
-				tr.commit();
 				
+				//PASO 1: ASIGNAMOS USUARIO
+				recet.setUser(AccesoDB.getUsuarioActual());
+				//PASO 2: ASOCIAMOS LA RECETA A CADA LINEA INGREDIENTE
+				for(RecetaIngrediente ri : listaIngredReceta) {
+					ri.setId_receta(recet);
+				}
+				recet.setIngredientes(listaIngredReceta);		
+				//PASO 3: CALCULAMOS PUNTUACION RECETA
+				recet.setPuntuacion(RecetaIngrediente.calcularPuntuacion(recet)); //ASIGNAR LA PUNTUACION JUSTO ANTES DE GUARDAR RECETA				
+				//PASO 4: GUARDAMOS RECETA
+				session.persist(recet);
+				session.flush(); //FUERZA A GUARDAR PARA OBTENER EL ID				
+				//PASO 5: GUARDAMOS CADA LINEA INGREDIENTE
+				for(RecetaIngrediente ri : listaIngredReceta) {
+					session.persist(ri);
+					AccesoDB.recalcularYGuardarRanking(); // RECALCULAMOS Y GUARDAMOS POSICION RANKING
+				}
+				tr.commit();				
 				System.out.println("Receta añadida correctamente.");
-				mostrarMensaje();
-		//		irARecetario();
+				mostrarMensaje("Receta añadida correctamente.");
+				irARecetas();
 				
 			} catch (Exception e) {
 				if (tr != null) tr.rollback();
@@ -247,12 +252,20 @@ public class CrearRecetaController {
 		        }
 			}
 			
-		//METODO PARA MOSTRAR MENSAJE INFORMATIVO EN LA INTERFAZ DE USUARIO
-			public void mostrarMensaje() {
+			//METODO PARA MOSTRAR MENSAJE INFORMATIVO EN LA INTERFAZ DE USUARIO
+			public void mostrarMensaje(String mensaje) {
 				Alert alerta = new Alert (AlertType.INFORMATION);
-				alerta.setContentText("Receta añadida correctamente");
+				alerta.setTitle("Información");
+				alerta.setContentText(mensaje);
 				alerta.show();
 			}
-	
+			
+			private void mostrarAlerta(String string) {
+				Alert alert = new Alert(Alert.AlertType.WARNING);
+			    alert.setTitle("Aviso");
+			    alert.setContentText(string);
+			    alert.showAndWait();
+			}
+			
 	}
 	

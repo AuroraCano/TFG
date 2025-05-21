@@ -23,6 +23,9 @@ public class Ingrediente {
     
     @Column(name = "ingrediente_procesado")
 	private	boolean ingredienteProcesado;
+    
+    @Column(name="azucar_100gr")
+    private Boolean azucar100gr = false;
 
 	//CONSTRUCTOR POR DEFECTO PARA HIBERNATE
 	public Ingrediente() {		
@@ -64,6 +67,7 @@ public class Ingrediente {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	    this.azucar100gr = nombre.contains("azucar");
 	}
 
 	public String getTipo() {
@@ -88,6 +92,14 @@ public class Ingrediente {
 
 	public void setIngredienteProcesado(boolean ingredienteProcesado) {
 		this.ingredienteProcesado = ingredienteProcesado;
+	}
+
+	public boolean isAzucar100gr() {
+		return azucar100gr != null && azucar100gr;
+	}
+
+	public void setAzucar100gr(boolean azucar100gr) {
+		this.azucar100gr = azucar100gr;
 	}
 		
 }
