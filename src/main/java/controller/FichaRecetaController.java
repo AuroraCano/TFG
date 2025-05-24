@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -126,7 +127,8 @@ public class FichaRecetaController {
 		double media = Valoracion.calcularValoracionMedia(recet);
 		lblValoracionMedia.setText(media + " ★");
 		
-		if (Valoracion.yaValorado(user, recet)) {
+		//DESHABILITAMOS VALORACION SI YA HA VALORADO O SI ES EL CREADOR DE LA RECETA
+		if (Valoracion.yaValorado(user, recet) || recet.getUser().getId()== user.getId()){
 		    btnValorar.setDisable(true);
 		    comboEstrellas.setDisable(true);
 		}
@@ -139,23 +141,23 @@ public class FichaRecetaController {
 	private void registrarValoracion() {
 		Usuario user = AccesoDB.getUsuarioActual();
 		int estrellas = comboEstrellas.getValue();
-		
+
 		Valoracion v = new Valoracion();
 		v.setRecet(recet);
-	    v.setUser(user);
-	    v.setEstrellas(estrellas);
-	    
-	    Session session = AccesoDB.getSession();
-	    Transaction tr = session.beginTransaction();
-	    session.persist(v);
-	    tr.commit();
-	    session.close();
-	    
-	    lblValoracionMedia.setText(String.valueOf(Valoracion.calcularValoracionMedia(recet)));
-	    mostrarMensaje("¡Gracias por valorar!");
-	    btnValorar.setDisable(true);
-	    comboEstrellas.setDisable(true);
-	    
+		v.setUser(user);
+		v.setEstrellas(estrellas);
+
+		Session session = AccesoDB.getSession();
+		Transaction tr = session.beginTransaction();
+		session.persist(v);
+		tr.commit();
+		session.close();
+
+		lblValoracionMedia.setText(String.valueOf(Valoracion.calcularValoracionMedia(recet) + " ★"));
+		mostrarMensaje("¡Gracias por valorar!");
+		btnValorar.setDisable(true);
+		comboEstrellas.setDisable(true);
+
 	}
 	
 	// DEFINIMOS ACCION DEL BOTON PARA IR AGREGANDO INGREDIENTES A LA TABLA
@@ -167,6 +169,14 @@ public class FichaRecetaController {
 		if (seleccionado != null && !cantidadTexto.isBlank()) {
 			try {
 				int cantidad = Integer.parseInt(cantidadTexto);
+				
+				//COMPROBAMOS SI ESE INGREDIENTE YA SE HA AÑADIDO A LA LISTA
+	            boolean yaExiste = listaIngredReceta.stream()
+	            		.anyMatch(ri -> ri.getId_ingrediente().getId() == seleccionado.getId());
+	            if (yaExiste) {
+	            	mostrarAlerta("Ese ingrediente ya ha sido añadido");	     
+	            	return;
+	            }
 
 				// CREAMOS LOS CAMPOS PARA AGREGAR UNA FILA DE LA TABLA
 				RecetaIngrediente ri = new RecetaIngrediente();
@@ -270,7 +280,9 @@ public class FichaRecetaController {
 				try {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/recetas.fxml"));
 		            Stage stage = (Stage) flechaRecetario.getScene().getWindow();
-		            stage.setScene(new Scene(loader.load()));
+		            Parent root = loader.load();
+		            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
+		            stage.setScene(scene);
 		        } catch (Exception e) {
 		            e.printStackTrace();
 		        }
@@ -283,13 +295,20 @@ public class FichaRecetaController {
 				alerta.setContentText(mensaje);
 				alerta.show();
 			}
-		//
+		
 			public void mostrarError(String mensaje) {
 				Alert alerta = new Alert(AlertType.ERROR);
 			    alerta.setTitle("Error");
 			    alerta.setHeaderText(null);
 			    alerta.setContentText(mensaje);
 			    alerta.showAndWait();			
+			}
+			
+			private void mostrarAlerta(String string) {
+				Alert alert = new Alert(Alert.AlertType.WARNING);
+			    alert.setTitle("Aviso");
+			    alert.setContentText(string);
+			    alert.showAndWait();
 			}
 	
 	}	

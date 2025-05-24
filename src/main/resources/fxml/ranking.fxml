@@ -8,17 +8,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #E6E6FA;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RankingController">
+<AnchorPane prefHeight="680.0" prefWidth="800.0" style="-fx-background-color: #E6E6FA;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RankingController">
 
     <children>
 
-        <Label alignment="CENTER" layoutX="-2.0" layoutY="1.0" prefHeight="51.0" prefWidth="800.0" style="-fx-text-fill: #0f52ba;" text="Ranking de Recetas Saludables">
+        <Label alignment="CENTER" layoutX="-2.0" layoutY="1.0" prefHeight="63.0" prefWidth="800.0" style="-fx-text-fill: #0f52ba;" text="Ranking de Recetas Saludables">
             <font>
                 <Font name="System Bold" size="22.0" />
             </font>
         </Label>
 
-        <TableView fx:id="tablaRanking" layoutX="50.0" layoutY="70.0" prefHeight="450.0" prefWidth="700.0">
+        <TableView fx:id="tablaRanking" layoutX="50.0" layoutY="70.0" prefHeight="450.0" prefWidth="700.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="70.0">
 
             <columns>
                 <TableColumn fx:id="columPosicion" prefWidth="80.0" text="Posición" />
@@ -29,7 +29,7 @@
             </columns>
         </TableView>
 
-        <ImageView fx:id="flechaRecetario" fitHeight="40.0" fitWidth="50.0" layoutX="14.0" layoutY="538.0" onMouseClicked="#irARecetario" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="flechaRecetario" fitHeight="40.0" fitWidth="50.0" onMouseClicked="#irARecetario" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0">
             <image>
                 <Image url="@../images/flecha3.png" />
             </image>

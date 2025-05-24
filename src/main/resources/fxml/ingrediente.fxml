@@ -20,23 +20,24 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="570.0" prefWidth="624.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #cce7ff);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.IngredienteController">
-  <VBox prefHeight="569.0" prefWidth="608.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #cce7ff);">
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="61.0" prefWidth="643.0" style="-fx-background-color: #E6E6FA;" text="Lista de Ingredientes" textAlignment="CENTER" textFill="#0f52ba">
+<AnchorPane prefHeight="680.0" prefWidth="800.0" style="-fx-background-color: #E6E6FA;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.IngredienteController">
+  <VBox prefHeight="569.0" prefWidth="608.0" style="-fx-background-color: #E6E6FA;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="61.0" prefWidth="807.0" style="-fx-background-color: #E6E6FA;" text="Lista de Ingredientes" textAlignment="CENTER" textFill="#0f52ba">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-          <TableView fx:id="tablaIngredientes" prefHeight="295.0" prefWidth="672.0" style="-fx-background-color: #E6E6FA;" VBox.vgrow="ALWAYS">
+          <TableView fx:id="tablaIngredientes" prefHeight="403.0" prefWidth="800.0" style="-fx-background-color: #E6E6FA;" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="columNombre" prefWidth="152.0" text="Nombre" />
             <TableColumn fx:id="columTipo" prefWidth="116.0" text="Tipo" />
             <TableColumn fx:id="columCalorias" prefWidth="76.0" text="Calorías" />
             <TableColumn fx:id="columProcesado" prefWidth="132.0" text="Procesado" />
             <TableColumn fx:id="colEliminar" prefWidth="73.0" text="Eliminar" />
+            <TableColumn fx:id="colEditar" prefWidth="73.0" text="Editar" />
         </columns>
     </TableView>
-      <GridPane alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="204.0" prefWidth="640.0" style="-fx-background-color: #E6E6FA;">           
+      <GridPane fx:id="gridFormularioIngredientes" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="126.0" prefWidth="652.0" style="-fx-background-color: #E6E6FA;" VBox.vgrow="ALWAYS">           
             <Label contentDisplay="TOP" text="Nombre">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -60,43 +61,7 @@
                <GridPane.margin>
                   <Insets left="25.0" />
                </GridPane.margin>
-            </Label>        
-            <Button fx:id="añadirButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#añadirIngrediente" text="Añadir" textAlignment="CENTER" textFill="#0f52ba" GridPane.columnIndex="1" GridPane.rowIndex="6">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="120.0" />
-               </GridPane.margin>
-            <effect>
-               <DropShadow>
-                  <color>
-                     <Color red="0.6627451181411743" green="0.48627451062202454" blue="0.6980392336845398" />
-                  </color>
-               </DropShadow>
-            </effect>
-            <cursor>
-               <Cursor fx:constant="HAND" />
-            </cursor>
-            </Button>
-            <Button fx:id="editarButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editarIngrediente" text="Editar" textFill="#0f52ba" GridPane.columnIndex="1" GridPane.rowIndex="6">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="25.0" />
-               </GridPane.margin>
-            <effect>
-               <DropShadow>
-                  <color>
-                     <Color red="0.6627451181411743" green="0.48627451062202454" blue="0.6980392336845398" />
-                  </color>
-               </DropShadow>
-            </effect>
-            <cursor>
-               <Cursor fx:constant="HAND" />
-            </cursor>
-            </Button>
+            </Label>
             <TextField fx:id="nombreTxt" alignment="CENTER" prefHeight="2.0" prefWidth="165.0" GridPane.columnIndex="1">
                <opaqueInsets>
                   <Insets />
@@ -122,41 +87,70 @@
             <GridPane.margin>
                <Insets left="15.0" right="20.0" />
             </GridPane.margin>
-         </CheckBox>                              
-            <ImageView fx:id="flechaRecetario" fitHeight="40.0" fitWidth="50.0" onMouseClicked="#irARecetario" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6">
-               <image>
-                  <Image url="@../images/flecha3.png" />
-               </image>
-               <GridPane.margin>
-                  <Insets bottom="18.0" left="20.0" />
-               </GridPane.margin>
-            </ImageView>
-         <ComboBox fx:id="tipoCombo" prefHeight="25.0" prefWidth="166.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         </CheckBox>
+         <ComboBox fx:id="tipoCombo" prefHeight="25.0" prefWidth="258.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <GridPane.margin>
                <Insets left="15.0" right="20.0" />
             </GridPane.margin>
          </ComboBox>
          <columnConstraints>
-            <ColumnConstraints minWidth="200.0" />
-            <ColumnConstraints maxWidth="194.0" minWidth="200.0" prefWidth="194.0" />
-            <ColumnConstraints maxWidth="95.0" minWidth="200.0" prefWidth="90.0" />
+            <ColumnConstraints maxWidth="240.0" minWidth="189.0" prefWidth="189.0" />
+            <ColumnConstraints maxWidth="291.0" minWidth="158.0" prefWidth="291.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints maxHeight="60.0" minHeight="30.0" prefHeight="32.0" />
-            <RowConstraints maxHeight="52.0" minHeight="15.0" prefHeight="30.0" />
-            <RowConstraints maxHeight="47.0" minHeight="20.0" prefHeight="27.0" />
-            <RowConstraints maxHeight="43.0" minHeight="22.0" prefHeight="43.0" />
-            <RowConstraints />
+            <RowConstraints maxHeight="60.0" minHeight="1.0" prefHeight="33.0" />
+            <RowConstraints maxHeight="61.0" minHeight="15.0" prefHeight="26.0" />
+            <RowConstraints maxHeight="50.0" minHeight="6.0" prefHeight="32.0" />
+            <RowConstraints maxHeight="64.0" minHeight="20.0" prefHeight="25.0" />
             <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
-            <RowConstraints maxHeight="58.0" minHeight="58.0" prefHeight="58.0" />
+            <RowConstraints />
             <RowConstraints />
          </rowConstraints>
-         <padding>
-            <Insets right="20.0" />
-         </padding>       
-      </GridPane>     
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>       
+      </GridPane>
+      <AnchorPane prefHeight="69.0" prefWidth="639.0" style="-fx-background-color: #E6E6FA;">
+         <children>                              
+               <ImageView fx:id="flechaRecetario" fitHeight="40.0" fitWidth="50.0" layoutX="22.0" layoutY="15.0" onMouseClicked="#irARecetario" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0">
+                  <image>
+                     <Image url="@../images/flecha3.png" />
+                  </image>
+               </ImageView>        
+               <Button fx:id="añadirButton" alignment="CENTER" contentDisplay="RIGHT" layoutX="455.0" layoutY="20.0" mnemonicParsing="false" onAction="#añadirIngrediente" text="Añadir" textAlignment="CENTER" textFill="#0f52ba" AnchorPane.bottomAnchor="20.0">
+                  <font>
+                     <Font name="System Bold" size="14.0" />
+                  </font>
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.6627451181411743" green="0.48627451062202454" blue="0.6980392336845398" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               </Button>
+               <Button fx:id="editarButton" alignment="CENTER" contentDisplay="RIGHT" layoutX="307.0" layoutY="20.0" mnemonicParsing="false" onAction="#editarIngrediente" text="Editar" textFill="#0f52ba" AnchorPane.bottomAnchor="20.0">
+                  <font>
+                     <Font name="System Bold" size="14.0" />
+                  </font>
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.6627451181411743" green="0.48627451062202454" blue="0.6980392336845398" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               </Button>
+         </children>
+      </AnchorPane>     
    </VBox>
-   <Button fx:id="masButton" alignment="CENTER" contentDisplay="CENTER" layoutX="548.0" layoutY="15.0" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#alPulsarMas" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS">
+   <Button fx:id="masButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#alPulsarMas" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="15.0">
       <graphic>
          <ImageView fitHeight="40.0" fitWidth="50.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
             <image>

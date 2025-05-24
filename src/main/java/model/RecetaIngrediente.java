@@ -43,7 +43,7 @@ public class RecetaIngrediente {
 					grProcesados += cantidad;	
 				}
 			}			
-			//NORMALIZAMOS A 100 GRAMOS
+			
 			if (grTotal ==0) return 0; //EVITAMOS DIVISION POR CERO
 			
 			double calorias100gr = (caloriasTotal / grTotal) * 100;		

@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -71,7 +72,9 @@ public class RankingController {
 			    	//CARGAMOS LA VISTA FXML
 			    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fichaReceta.fxml"));
 		            Stage stage = (Stage) tablaRanking.getScene().getWindow();
-		            stage.setScene(new Scene(loader.load()));	            
+		            Parent root = loader.load();
+		            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
+		            stage.setScene(scene);            
 			    } catch (IOException e) {
 			        e.printStackTrace();
 			    }
@@ -128,7 +131,9 @@ public class RankingController {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/recetario.fxml"));
             Stage stage = (Stage) flechaRecetario.getScene().getWindow();
-            stage.setScene(new Scene(loader.load()));
+            Parent root = loader.load();
+            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
+            stage.setScene(scene);
         } catch (Exception e) {
             e.printStackTrace();
         }

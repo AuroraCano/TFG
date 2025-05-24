@@ -19,7 +19,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CrearRecetaController">
+<AnchorPane prefHeight="800.0" prefWidth="680.0" style="-fx-background-color: #E6E6FA;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CrearRecetaController">
    <children>
       <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="682.0" prefWidth="745.0" style="-fx-background-color: #E6E6FA;">
         <columnConstraints>
@@ -27,10 +27,10 @@
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="616.0" minWidth="10.0" prefWidth="614.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="98.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="120.0" minHeight="10.0" prefHeight="120.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="149.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="116.0" minHeight="10.0" prefHeight="116.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="88.0" minHeight="10.0" prefHeight="63.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="191.0" minHeight="10.0" prefHeight="165.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="79.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="163.0" minHeight="10.0" prefHeight="130.0" vgrow="SOMETIMES" />
@@ -53,7 +53,7 @@
                   <Insets left="25.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Descripción" GridPane.rowIndex="2">
+            <Label text="Pasos para la elaboración" wrapText="true" GridPane.rowIndex="2">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -103,7 +103,7 @@
                   <Insets left="15.0" right="35.0" top="40.0" />
                </GridPane.margin>
             </TextField>
-            <TextArea fx:id="txtdescripcion" maxWidth="250.0" prefHeight="101.0" prefWidth="235.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextArea fx:id="txtdescripcion" maxWidth="363.0" prefHeight="120.0" prefWidth="363.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="15.0" right="35.0" />
                </GridPane.margin></TextArea>
@@ -112,9 +112,9 @@
                   <Insets left="15.0" right="35.0" />
                </GridPane.margin>
             </ComboBox>
-            <ImageView fx:id="imgfoto" fitHeight="110.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <ImageView fx:id="imgfoto" fitHeight="182.0" fitWidth="192.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
-                  <Insets left="290.0" />
+                  <Insets left="400.0" />
                </GridPane.margin>
             </ImageView>
             <Button fx:id="btnSeleccImagen" onAction="#seleccionarImagen" text="Seleccionar imagen" GridPane.columnIndex="1" GridPane.rowIndex="3">
@@ -172,7 +172,7 @@
       	</ImageView>                                
          </children>
       </GridPane>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="-2.0" prefHeight="46.0" prefWidth="581.0" text="Creación nueva Receta" textAlignment="CENTER" textFill="#0f52ba">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="-2.0" prefHeight="59.0" prefWidth="738.0" text="Creación nueva Receta" textAlignment="CENTER" textFill="#0f52ba">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>

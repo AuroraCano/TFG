@@ -2,6 +2,7 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -58,40 +59,51 @@ public class RegistroController {
 	        mostrarError("Introduce un correo electrónico válido.");
 	        return;
 	    }
-		
+	    
 	    //VALIDAMOS QUE LAS CONTRASEÑAS COINCIDAN
 	    if (!txtpass.getText().equals(txtrepetirpass.getText())) {
 			mostrarError("Las contraseñas no coinciden");
 		     return; 
 		    }
+		
+		//CONEXION CON LA BBDD E INSETAR REGISTRO		
+		Session session = null;
+		Transaction tr = null;		
+		try {
+			session = AccesoDB.getSession();
+			
+		//VALIDAMOS QUE EL EMAIL INTRODUCIDO NO EXISTA YA	
+	    Usuario existente = session.createQuery(
+	    		"FROM Usuario WHERE email =: email", Usuario.class)
+	    		.setParameter("email", txtemail.getText())
+	    		.uniqueResult();
 	    
-	    //CREAMOS USUARIO
-		Usuario user = new Usuario (
+	    if (existente != null) {
+	    	mostrarError("Ya existe usuario registrado con ese email");
+	    	return;
+	    }
+		
+	    //SI EL EMAIL NO EXISTE, CREAMOS USUARIO
+ 		Usuario user = new Usuario (
 			txtnombre.getText(),
 			txtapellidos.getText(),
 			txtemail.getText(),
 			txtpass.getText(),
 			txthotel.getText()	
-				);
-		
-		// CONEXION CON LA BBDD E INSETAR REGISTRO		
-		Session session = null;
-        Transaction tr = null;
-				 
-			try {
-				session = AccesoDB.getSession();
-				tr = session.beginTransaction();
-				session.persist(user); //INSERTA EL USUARIO EN LA BBDD
-				tr.commit();				
-				mostrarMensaje("Registro realizado correctamente");
-				irAInicio();
+				);		       				 
+			
+			tr = session.beginTransaction();
+			session.persist(user); //INSERTA EL USUARIO EN LA BBDD
+			tr.commit();				
+			mostrarMensaje("Registro realizado correctamente");
+			irAInicio();
 				
-			} catch (Exception e) {
-				if (tr != null) tr.rollback();
-	            e.printStackTrace();
-	            mostrarError("Error al registrar usuario.");
-	        } finally {
-	            if (session != null) session.close();
+		} catch (Exception e) {
+			if (tr != null) tr.rollback();
+	        e.printStackTrace();
+	        mostrarError("Error al registrar usuario.");
+	    } finally {
+	    	if (session != null) session.close();
 			}              						
 		}
 	
@@ -100,7 +112,9 @@ public class RegistroController {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
 	            Stage stage = (Stage) guardarbutton.getScene().getWindow();
-	            stage.setScene(new Scene(loader.load()));
+	            Parent root = loader.load();
+	            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
+	            stage.setScene(scene);
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }

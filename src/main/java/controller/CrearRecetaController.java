@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -104,6 +105,14 @@ public class CrearRecetaController {
 	    if (seleccionado != null && !cantidadTexto.isBlank()) {
 	        try {
 	            int cantidad = Integer.parseInt(cantidadTexto);
+	            
+	            //COMPROBAMOS SI ESE INGREDIENTE YA SE HA AÑADIDO A LA LISTA
+	            boolean yaExiste = listaIngredReceta.stream()
+	            		.anyMatch(ri -> ri.getId_ingrediente().getId() == seleccionado.getId());
+	            if (yaExiste) {
+	            	mostrarAlerta("Ese ingrediente ya ha sido añadido");	     
+	            	return;
+	            }
 
 	            // CREAMOS LOS CAMPOS PARA AGREGAR UNA FILA DE LA TABLA
 	            RecetaIngrediente ri = new RecetaIngrediente();
@@ -195,11 +204,11 @@ public class CrearRecetaController {
 				recet.setPuntuacion(RecetaIngrediente.calcularPuntuacion(recet)); //ASIGNAR LA PUNTUACION JUSTO ANTES DE GUARDAR RECETA				
 				//PASO 4: GUARDAMOS RECETA
 				session.persist(recet);
-				session.flush(); //FUERZA A GUARDAR PARA OBTENER EL ID				
+				session.flush(); //FUERZA A GUARDAR PARA OBTENER EL ID	
+				AccesoDB.recalcularYGuardarRanking(); // RECALCULAMOS Y GUARDAMOS POSICION RANKING
 				//PASO 5: GUARDAMOS CADA LINEA INGREDIENTE
 				for(RecetaIngrediente ri : listaIngredReceta) {
 					session.persist(ri);
-					AccesoDB.recalcularYGuardarRanking(); // RECALCULAMOS Y GUARDAMOS POSICION RANKING
 				}
 				tr.commit();				
 				System.out.println("Receta añadida correctamente.");
@@ -246,7 +255,9 @@ public class CrearRecetaController {
 				try {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/recetas.fxml"));
 		            Stage stage = (Stage) flechaRecetario.getScene().getWindow();
-		            stage.setScene(new Scene(loader.load()));
+		            Parent root = loader.load();
+		            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
+		            stage.setScene(scene);
 		        } catch (Exception e) {
 		            e.printStackTrace();
 		        }

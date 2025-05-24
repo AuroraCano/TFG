@@ -15,10 +15,13 @@ public class Main extends Application{
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
 		Parent root = loader.load();
-		Scene scene = new Scene(root);
+		
+		//TAMAÑO UNIFICADO PARA TODA LA APP
+		Scene scene = new Scene(root, 800, 680);
 	    
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("PostrEquilibrio");
+		primaryStage.getIcons().add(new javafx.scene.image.Image(getClass().getResourceAsStream("/images/icono.png")));
         primaryStage.show();
 		
 	}

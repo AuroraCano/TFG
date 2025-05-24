@@ -3,6 +3,7 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -40,7 +41,9 @@ public class VistaPrincipalController {
 		try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/perfil.fxml"));
             Stage stage = (Stage) perfilButton.getScene().getWindow();
-            stage.setScene(new Scene(loader.load()));
+            Parent root = loader.load();
+            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
+            stage.setScene(scene);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,7 +55,9 @@ public class VistaPrincipalController {
 			try {
 	            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/recetas.fxml"));
 	            Stage stage = (Stage) recetasButton.getScene().getWindow();
-	            stage.setScene(new Scene(loader.load()));
+	            Parent root = loader.load();
+	            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
+	            stage.setScene(scene);
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
@@ -63,7 +68,8 @@ public class VistaPrincipalController {
 		public void irAIngredientes(ActionEvent event) {
 			try {
 	            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ingrediente.fxml"));
-	            Scene scene = new Scene(loader.load());	
+	            Parent root = loader.load();
+	            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
 	            
 	            IngredienteController controller = loader.getController();
 	            controller.setUsuarioActual(AccesoDB.getUsuarioActual());
@@ -81,7 +87,9 @@ public class VistaPrincipalController {
 					try {
 			            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ranking.fxml"));
 			            Stage stage = (Stage) ingredientesButton.getScene().getWindow();
-			            stage.setScene(new Scene(loader.load()));	          
+			            Parent root = loader.load();
+			            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
+			            stage.setScene(scene);          
 			        } catch (Exception e) {
 			            e.printStackTrace();
 			        }
@@ -93,7 +101,9 @@ public class VistaPrincipalController {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
 	            Stage stage = (Stage) flechaInicio.getScene().getWindow();
-	            stage.setScene(new Scene(loader.load()));
+	            Parent root = loader.load();
+	            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
+	            stage.setScene(scene);
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }

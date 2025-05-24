@@ -1,10 +1,13 @@
 package controller;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -24,6 +27,7 @@ import model.AccesoDB;
 import model.Receta;
 
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -51,12 +55,16 @@ public class RecetaController {
 		@FXML
 		private TableColumn<Receta, Void> colEditar;
 		@FXML
+		private TableColumn<Receta, String> columHotel;
+		@FXML
 		private TableColumn<Receta, Integer> columPuntuacion;
 		@FXML
 		private ObservableList<Receta> listaRecetas = FXCollections.observableArrayList();		
 		
 		@FXML
-		public void initialize () {			
+		public void initialize () {				
+			buscadorButton.setOnAction(e -> buscarRecetas());
+			
 			buscadorComBox.getItems().addAll(
 			        "Tipo postre",
 			        "Contiene ingrediente:",
@@ -89,9 +97,10 @@ public class RecetaController {
 		}
 		
 		private void configurarColumnas() {
-			columNombre.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNombre()));
-			columTipo.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getTipoPostre()));
-			columPuntuacion.setCellValueFactory(cellData ->	new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getPuntuacion()).asObject());
+			columNombre.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
+			columTipo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTipoPostre()));
+			columPuntuacion.setCellValueFactory(cellData ->	new SimpleIntegerProperty(cellData.getValue().getPuntuacion()).asObject());
+			columHotel.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUser().getHotel()));
 		}
 					
 		//METODO PARA IR A LA PANTALLA CREACIÓN DE RECETA
@@ -99,7 +108,9 @@ public class RecetaController {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/crearReceta.fxml"));
 	            Stage stage = (Stage) masButton.getScene().getWindow();
-	            stage.setScene(new Scene(loader.load()));
+	            Parent root = loader.load();
+	            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
+	            stage.setScene(scene);
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
@@ -184,23 +195,14 @@ public class RecetaController {
 		    	//CARGAMOS LA VISTA FXML
 		    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fichaReceta.fxml"));
 	            Stage stage = (Stage) tablaRecetas.getScene().getWindow();
-	            stage.setScene(new Scene(loader.load()));	            
+	            Parent root = loader.load();
+	            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
+	            stage.setScene(scene);            
 		    } catch (IOException e) {
 		        e.printStackTrace();
 		    }
 		}					
-		
-		// METODO PARA VOLVER A LA PANTALLA DEL MENU PRINCIPAL/RECETARIO
-		public void irARecetario() {
-			try {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/recetario.fxml"));
-				Stage stage = (Stage) flechaRecetario.getScene().getWindow();
-				stage.setScene(new Scene(loader.load()));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
+				
 		public void cargarRecetaDesdeDB() {
 			// LIMPIAMOS LISTA Y CONECTAMOS CON LA BBDD
 			listaRecetas.clear();
@@ -223,11 +225,89 @@ public class RecetaController {
 					session.close();
 			}
 		}			
-			
+		
+		
+		private void buscarRecetas() {
+			 String criterio = buscadorComBox.getValue();
+			    String texto = normalizarTexto(buscadorTxt.getText());
+
+			    if (criterio == null || texto.isEmpty()) {
+			        cargarRecetaDesdeDB(); // MOSTRAMOS TODAS LAS RECETAS
+			        return;
+			    }
+			    listaRecetas.clear();
+
+			    Session session = null;
+			    try {
+			        session = AccesoDB.getSession();
+			        List<Receta> recetas = session.createQuery(
+			            "SELECT DISTINCT r FROM Receta r LEFT JOIN FETCH r.ingredientes", Receta.class
+			        ).list();
+
+			        switch (criterio) {
+			            case "Tipo postre":
+			                for (Receta r : recetas) {
+			                    if (r.getTipoPostre() != null && normalizarTexto(r.getTipoPostre()).contains(texto)) {
+			                        listaRecetas.add(r);
+			                    }
+			                }
+			                break;
+			            case "Contiene ingrediente:":
+			                for (Receta r : recetas) {
+			                    boolean contiene = r.getIngredientes().stream()
+			                        .anyMatch(ri -> normalizarTexto(ri.getId_ingrediente().getNombre()).contains(texto));
+			                    if (contiene) {
+			                        listaRecetas.add(r);
+			                    }
+			                }
+			                break;
+			            case "NO Contiene ingrediente:":
+			                for (Receta r : recetas) {
+			                    boolean contiene = r.getIngredientes().stream()
+			                        .anyMatch(ri -> normalizarTexto(ri.getId_ingrediente().getNombre()).contains(texto));
+			                    if (!contiene) {
+			                        listaRecetas.add(r);
+			                    }
+			                }
+			                break;
+			        }
+
+			    } catch (Exception e) {
+			        e.printStackTrace();
+			        System.out.println("Error al filtrar recetas.");
+			        mostrarMensaje("Error al filtrar recetas.");
+			    } finally {
+			        if (session != null) session.close();
+			    }
+			    
+		}
+
+		//METODO PARA IGNORAR MAYUSCULAS, MINUSCULAS Y TILDES
+		private String normalizarTexto(String texto) {
+		    return Normalizer.normalize(texto, Normalizer.Form.NFD)
+		                     .replaceAll("[\\p{InCombiningDiacriticalMarks}]", "")
+		                     .toLowerCase()
+		                     .trim();
+		}
+		
+		// METODO PARA VOLVER A LA PANTALLA DEL MENU PRINCIPAL/RECETARIO
+		public void irARecetario() {
+			try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/recetario.fxml"));
+				Stage stage = (Stage) flechaRecetario.getScene().getWindow();
+	            Parent root = loader.load();
+	            Scene scene = new Scene(root, 800, 680); // MISMO TAMAÑO INDICADO EN MAIN
+	            stage.setScene(scene);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+						
 		//METODO PARA MOSTRAR MENSAJE INFORMATIVO EN LA INTERFAZ DE USUARIO
-		public void mostrarMensaje() {
+		public void mostrarMensaje(String mensaje) {
 			Alert alerta = new Alert (AlertType.INFORMATION);
-			alerta.setContentText("Receta añadida correctamente");
+			alerta.setTitle("Información");
+			alerta.setContentText(mensaje);
 			alerta.show();
 		}
 		
