@@ -31,6 +31,7 @@ import java.text.Normalizer;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class RecetaController {		
 		
@@ -116,46 +117,55 @@ public class RecetaController {
 	        }
 		}
 				
-		//CREAMOS ACCION DEL BOTON ELIMINAR DENTRO DE LA TABLA
+		// CREAMOS ACCION DEL BOTON ELIMINAR DENTRO DE LA TABLA
 		private void añadirColumnaEliminar() {
-			
-		    colEliminar.setCellFactory(param -> new TableCell<>() {
-		        private final Button btn = new Button("✖"); 
-		        {
-		            btn.setOnAction(event -> {
-		                Receta recet = getTableView().getItems().get(getIndex());
-		                //MOSTRAR AL USUARIO MENSAJE DE AVISO ANTES DE ELIMINAR RECETA Y ESPERAR CONFIRMACION					
-						Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-					    confirmacion.setTitle("Confirmar eliminación");
-					    confirmacion.setHeaderText("¿Estás seguro de que deseas eliminar esta receta?");
-					    confirmacion.setContentText("Receta: " + recet.getNombre());
 
-					    confirmacion.showAndWait().ifPresent(respuesta -> {
-					        if (respuesta == ButtonType.OK) {		                		                		             
-					    // ACCESO A LA BBDD Y ELIMINAR EL INGREDIENTE
-						AccesoDB.accederDB(session -> session.remove(session.merge(recet)));				
-						// ELIMINAR DE LA TABLA DE LA INTERFAZ USUARIO
-						listaRecetas.remove(recet);
-					        }
-					    });	
-		            });    
-		            btn.setStyle("-fx-background-color: #FF6666; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;");	            
-		        }
-		        @Override
-		        protected void updateItem(Void item, boolean empty) {
-		            super.updateItem(item, empty);
-		            if (empty) {
-		                setGraphic(null);
-		            } else {
-		                setGraphic(btn);
-		                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-		                setAlignment(Pos.CENTER);
-		            }
-		        }
-		    });
+			colEliminar.setCellFactory(param -> new TableCell<>() {
+				private final Button btn = new Button("✖");
+				{
+					btn.setOnAction(event -> {
+						Receta recet = getTableView().getItems().get(getIndex());
+						// MOSTRAR AL USUARIO MENSAJE DE AVISO ANTES DE ELIMINAR RECETA Y ESPERAR CONFIRMACION
+						Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+						confirmacion.setTitle("Confirmar eliminación");
+						confirmacion.setHeaderText("¿Estás seguro de que deseas eliminar esta receta?");
+						confirmacion.setContentText("Receta: " + recet.getNombre());
+
+						confirmacion.showAndWait().ifPresent(respuesta -> {
+							if (respuesta == ButtonType.OK) {
+								// ACCESO A LA BBDD
+								AccesoDB.accederDB(session -> {
+									// PRIMERO ELIMINAMOS VALORACIONES DE LA RECETA
+									session.createMutationQuery("DELETE FROM Valoracion v WHERE v.recet = :receta")
+											.setParameter("receta", recet)
+											.executeUpdate();
+									// DESPUES ELIMINAMOS RECETA
+									session.remove(session.merge(recet));
+								});
+									// ACTUALIZAMOS LA LISTA DE RECETAS EN INTERFAZ
+									listaRecetas.remove(recet);
+									mostrarMensaje("Receta eliminada correctamente");									
+									}
+								});							
+						});				
+					btn.setStyle(
+							"-fx-background-color: #FF6666; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;");
+				}
+
+				@Override
+				protected void updateItem(Void item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty) {
+						setGraphic(null);
+					} else {
+						setGraphic(btn);
+						setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+						setAlignment(Pos.CENTER);
+					}
+				}
+			});
 		}
-				
-		
+					
 		// CREAMOS ACCION DEL BOTON EDITAR DENTRO DE LA TABLA
 		private void añadirColumnaEditar() {
 
@@ -309,6 +319,13 @@ public class RecetaController {
 			alerta.setTitle("Información");
 			alerta.setContentText(mensaje);
 			alerta.show();
+		}
+		//METODO PARA MOSTRAR MENSAJE INFORMATIVO EN LA INTERFAZ DE USUARIO
+		public void mostrarError(String mensaje) {
+				Alert alerta = new Alert (AlertType.ERROR);
+				alerta.setTitle("Alerta");
+				alerta.setContentText(mensaje);
+				alerta.show();				
 		}
 		
 	}

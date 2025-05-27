@@ -205,12 +205,12 @@ public class CrearRecetaController {
 				//PASO 4: GUARDAMOS RECETA
 				session.persist(recet);
 				session.flush(); //FUERZA A GUARDAR PARA OBTENER EL ID	
-				AccesoDB.recalcularYGuardarRanking(); // RECALCULAMOS Y GUARDAMOS POSICION RANKING
+				AccesoDB.recalcularYGuardarRanking(); // RECALCULAMOS Y GUARDAMOS POSICION RANKING				
 				//PASO 5: GUARDAMOS CADA LINEA INGREDIENTE
 				for(RecetaIngrediente ri : listaIngredReceta) {
 					session.persist(ri);
 				}
-				tr.commit();				
+				tr.commit();	
 				System.out.println("Receta añadida correctamente.");
 				mostrarMensaje("Receta añadida correctamente.");
 				irARecetas();

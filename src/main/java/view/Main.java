@@ -1,7 +1,6 @@
 package view;
 
 import java.io.IOException;
-
 import javafx.application.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +11,7 @@ public class Main extends Application{
 	
 	@Override
 	public void start (Stage primaryStage) throws IOException {
-		
+							
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
 		Parent root = loader.load();
 		
@@ -23,7 +22,7 @@ public class Main extends Application{
 		primaryStage.setTitle("PostrEquilibrio");
 		primaryStage.getIcons().add(new javafx.scene.image.Image(getClass().getResourceAsStream("/images/icono.png")));
         primaryStage.show();
-		
+        		
 	}
 
 	public static void main(String[] args) {

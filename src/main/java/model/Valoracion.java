@@ -67,8 +67,6 @@ public class Valoracion {
 		return count > 0;
 	}
 	
-	//VALIDACION PARA NO PODER VOTAR TU PROPIA RECETA
-	
 	
 	public int getId() {
 		return id;
