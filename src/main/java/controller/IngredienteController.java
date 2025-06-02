@@ -190,6 +190,11 @@ public class IngredienteController {
 				{
 				btn.setOnAction(event -> {
 					Ingrediente ingred = getTableView().getItems().get(getIndex());
+					//VERIFICAMOS SI EL INGREDIENTE A ELIMINAR ESTÁ EN USO EN ALGUNA RECETA
+					if (estaEnUso(ingred)) {
+						mostrarError("Este ingrediente se utiliza en una o más recetas, no se puede eliminar");
+						return;
+					}
 					//MOSTRAR AL USUARIO MENSAJE DE AVISO ANTES DE ELIMINAR INGREDIENTE Y ESPERAR CONFIRMACION					
 					Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
 				    confirmacion.setTitle("Confirmar eliminación");
@@ -220,7 +225,17 @@ public class IngredienteController {
 			}
 		});
 	}
-	
+
+	//METODO PARA CONFIRMAR SI UN INGREDIENTE SE UTILIZA EN ALGUNA RECETA
+	private boolean estaEnUso(Ingrediente ingrediente) {
+	    try (Session session = AccesoDB.getSession()) {
+	        String hql = "SELECT COUNT(ri.idLinea) FROM RecetaIngrediente ri WHERE ri.idIngrediente = :ingrediente";
+	        Long cantidad = session.createQuery(hql, Long.class)
+	                               .setParameter("ingrediente", ingrediente)
+	                               .uniqueResult();
+	        return cantidad != null && cantidad > 0;
+	    }
+	}
 
 	// CREAMOS ACCION DEL BOTON EDITAR DENTRO DE LA TABLA
 	private void añadirColumnaEditar() {
